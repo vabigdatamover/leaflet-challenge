@@ -1,20 +1,32 @@
 // Creating map object
 var map = L.map("map", {
     center: [40.7128, -74.0059],
-    zoom: 11
+    zoom: 1
   });
   
   // Adding tile layer
+  // L.tileLayer("https://api.mapbox.com/v4/mapbox.satellite/1/0/0@2x.jpg90?access_token={accessToken}",{
   L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 18,
+    maxZoom: 1,
     id: "mapbox.streets",
     accessToken: API_KEY
   }).addTo(map);
+
+// var graymap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+//   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
+//   maxZoom: 18,
+//   id: "mapbox.streets",
+//   accessToken: API_KEY
+// });
   
   // If data.beta.nyc is down comment out this link
-  var link = "http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/" +
-  "35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson";
+
+  var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+  
+  
+  // var link = "http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/" +
+  // "35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson";
   
   // Uncomment this link local geojson for when data.beta.nyc is down
   // var link = "static/data/nyc.geojson";
