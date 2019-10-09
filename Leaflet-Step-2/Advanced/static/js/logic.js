@@ -12,7 +12,7 @@ var layers = {
   EMPTY: new L.LayerGroup(),
   LOW: new L.LayerGroup(),
   NORMAL: new L.LayerGroup(),
-  OUT_OF_ORDER: new L.LayerGroup()
+  Earthquakes: new L.LayerGroup()
 };
 
 // Create the map with our layers
@@ -24,7 +24,7 @@ var map = L.map("map-id", {
     layers.EMPTY,
     layers.LOW,
     layers.NORMAL,
-    layers.OUT_OF_ORDER
+    layers.Earthquakes
   ]
 });
 
@@ -33,11 +33,11 @@ lightmap.addTo(map);
 
 // Create an overlays object to add to the layer control
 var overlays = {
-  "Coming Soon": layers.COMING_SOON,
-  "Empty Stations": layers.EMPTY,
-  "Low Stations": layers.LOW,
-  "Healthy Stations": layers.NORMAL,
-  "Out of Order": layers.OUT_OF_ORDER
+  "Satellite": layers.COMING_SOON,
+  "Greyscale": layers.EMPTY,
+  "Outdoors": layers.LOW,
+  "Fault Line": layers.NORMAL,
+  "Earthquakes": layers.Earthquakes
 };
 
 // Create a control for our layers, add our overlay layers to it
