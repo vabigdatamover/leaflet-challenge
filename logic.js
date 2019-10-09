@@ -13,14 +13,6 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(myMap);
 
 // Load in geojson data
-//var geoData = "Median_Household_Income_2016.geojson";
-
-//var geojson;
-
-// Grab data with d3
-// d3.json(geoData, function(data) {
-
-// Load in geojson data
 var geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 var geojson;
@@ -35,7 +27,7 @@ d3.json(geoData, function(data) {
     valueProperty: "MHI2016",
 
     // Set color scale
-    scale: ["#ffffb2", "#b10026"],
+    scale: ["#3e7f22", "#7f4f22"],
 
     // Number of breaks in step range
     steps: 10,
@@ -51,8 +43,7 @@ d3.json(geoData, function(data) {
 
     // Binding a pop-up to each layer
     onEachFeature: function(feature, layer) {
-      layer.bindPopup("Zip Code: " + feature.properties.ZIP + "<br>Median Household Income:<br>" +
-        "$" + feature.properties.MHI2016);
+      layer.bindPopup("Earthquake Magnitude: " + feature.properties.mag + "<br>Earthquake Location:<br>" + feature.properties.place);
     }
   }).addTo(myMap);
 
@@ -65,7 +56,7 @@ d3.json(geoData, function(data) {
     var labels = [];
 
     // Add min & max
-    var legendInfo = "<h1>Median Income</h1>" +
+    var legendInfo = "<h1>Earthquake Scale</h1>" +
       "<div class=\"labels\">" +
         "<div class=\"min\">" + limits[0] + "</div>" +
         "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
