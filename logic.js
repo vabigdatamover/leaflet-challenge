@@ -1,39 +1,87 @@
 // Creating map object
-var map = L.map("map", {
-    center: [38.89511, -77.03637],
-    zoom: 6
-  });
-  
-  // Adding tile layer
-  // L.tileLayer("https://api.mapbox.com/v4/mapbox.satellite/1/0/0@2x.jpg90?access_token={accessToken}",{
-  L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 11,
-    id: "mapbox.streets",
-    accessToken: API_KEY
-  }).addTo(map);
+var myMap = L.map("map", {
+  center: [38.89511, -77.03637],
+  zoom: 6
+});
 
-// var graymap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-//   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
-//   maxZoom: 18,
-//   id: "mapbox.streets",
-//   accessToken: API_KEY
-// });
-  
-  // If data.beta.nyc is down comment out this link
+// Adding tile layer
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.streets",
+  accessToken: API_KEY
+}).addTo(myMap);
 
-  var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
-  
-  
-  // var link = "http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/" +
-  // "35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson";
-  
-  // Uncomment this link local geojson for when data.beta.nyc is down
-  // var link = "static/data/nyc.geojson";
-  
-  // Grabbing our GeoJSON data..
-  d3.json(link, function(data) {
-    // Creating a GeoJSON layer with the retrieved data
-    L.geoJson(data).addTo(map);
-  });
-  
+// Load in geojson data
+//var geoData = "Median_Household_Income_2016.geojson";
+
+//var geojson;
+
+// Grab data with d3
+// d3.json(geoData, function(data) {
+
+// Load in geojson data
+var geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+
+var geojson;
+
+//Grab data with d3
+d3.json(geoData, function(data) {
+
+  // Create a new choropleth layer
+  geojson = L.choropleth(data, {
+
+    // Define what  property in the features to use
+    valueProperty: "MHI2016",
+
+    // Set color scale
+    scale: ["#ffffb2", "#b10026"],
+
+    // Number of breaks in step range
+    steps: 10,
+
+    // q for quartile, e for equidistant, k for k-means
+    mode: "q",
+    style: {
+      // Border color
+      color: "#fff",
+      weight: 1,
+      fillOpacity: 0.8
+    },
+
+    // Binding a pop-up to each layer
+    onEachFeature: function(feature, layer) {
+      layer.bindPopup("Zip Code: " + feature.properties.ZIP + "<br>Median Household Income:<br>" +
+        "$" + feature.properties.MHI2016);
+    }
+  }).addTo(myMap);
+
+  // Set up the legend
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limits;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add min & max
+    var legendInfo = "<h1>Median Income</h1>" +
+      "<div class=\"labels\">" +
+        "<div class=\"min\">" + limits[0] + "</div>" +
+        "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+      "</div>";
+
+    div.innerHTML = legendInfo;
+
+    limits.forEach(function(limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+    });
+
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding legend to the map
+  legend.addTo(myMap);
+
+});
