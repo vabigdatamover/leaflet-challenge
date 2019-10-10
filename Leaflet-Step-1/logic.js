@@ -81,7 +81,7 @@ d3.json(geoData, function (data) {
     }
   }).addTo(myMap);
 
-//add legend
+//add legend on Bottom Right Corner
 var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (map) {
@@ -89,6 +89,7 @@ legend.onAdd = function (map) {
   var div = L.DomUtil.create('div', 'info legend'),
     //Magnitude Grades, stops at 5 magnitude
     grades = [0, 1, 2, 3, 4, 5],
+    //Label?
     labels = [];
   //Legend Label Earthquake <break> Magnitude  
   div.innerHTML+='Eathquake<br>Magnitude <br><hr>'
