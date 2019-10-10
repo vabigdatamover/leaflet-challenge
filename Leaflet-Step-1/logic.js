@@ -4,8 +4,7 @@ var myMap = L.map("map", {
   zoom: 6
 });
 
-//Gray Map Option
-//var graymap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+//Gray Mapbox background
 L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
   maxZoom: 18,
@@ -82,33 +81,29 @@ d3.json(geoData, function (data) {
     }
   }).addTo(myMap);
 
-  // // Set up the legend
-  // var legend = L.control({ position: "bottomright" });
-  // legend.onAdd = function() {
-  //   var div = L.DomUtil.create("div", "info legend");
-  //   // var limits = geojson.options.limits;
-  //   // var colors = geojson.options.colors;
-  //   // var labels = [];
+//add legend
+var legend = L.control({position: 'bottomright'});
 
-  //   // Add min & max
-  //   var legendInfo = "<h1>Earthquake Scale</h1>" +
-  //     "<div class=\"labels\">" +
-  //       // "<div class=\"min\">" + limits[0] + "</div>" +
-  //       // "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
-  //     "</div>";
+legend.onAdd = function (map) {
+  //Dom Utility that puts legend into DIV & Info Legend
+  var div = L.DomUtil.create('div', 'info legend'),
+    //Magnitude Grades, stops at 5 magnitude
+    grades = [0, 1, 2, 3, 4, 5],
+    labels = [];
+  //Legend Label Earthquake <break> Magnitude  
+  div.innerHTML+='Eathquake<br>Magnitude <br><hr>'
 
-  //   div.innerHTML = legendInfo;
+  // loop through our density intervals and generate a label with a colored square for each interval
+  for (var i = 0; i < grades.length; i++) {
+    div.innerHTML +=
+      '<i style="background:' + getColor(grades[i] + 1) + '">&nbsp&nbsp&nbsp&nbsp</i> ' +
+      grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+  }
 
-    // limits.forEach(function(limit, index) {
-    //   labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
-    // });
-
-  //   div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-  //   return div;
-  // };
-
-  // // Adding legend to the map
-  // legend.addTo(myMap);
+  return div;
+};
+//Adds Legend to myMap
+legend.addTo(myMap);
 
 });
 
