@@ -1,19 +1,57 @@
+// // Creating map object
+// var myMap = L.map("map", {
+//   center: [38.89511, -77.03637],
+//   zoom: 6
+// });
+
+//Gray Mapbox background, Base Gray Layer
+var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.light",
+  accessToken: API_KEY
+})
+
+//Satellite Layer
+var satmap = L.tileLayer("https://api.tiles.mapbox.com/v4/%7Bid%7D/%7Bz%7D/%7Bx%7D/%7By%7D.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.streets-satellite",
+  accessToken: API_KEY
+})
+
+
+//Outdoors Layers
+var street = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.outdoors",
+  accessToken: API_KEY
+})
+
 // Creating map object
 var myMap = L.map("map", {
   center: [38.89511, -77.03637],
-  zoom: 6
+  zoom: 6,
+  layers: [graymap, satmap, street]
+
 });
 
-//Gray Mapbox background
-L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
-  maxZoom: 18,
-  id: "mapbox.streets",
-  accessToken: API_KEY
-}).addTo(myMap);
+graymap.addTo(myMap)
+
+
+var basemaps = {
+  "Gray Map": graymap, 
+  "Satellite Map": satmap,
+  "Street Map": street,
+}
+
+L.control.layers(basemaps).addTo(myMap)
 
 // Load in geojson data
 var geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+
+// var plateData = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json",
 
 // var geojson;
 
@@ -88,11 +126,10 @@ legend.onAdd = function (map) {
   //Dom Utility that puts legend into DIV & Info Legend
   var div = L.DomUtil.create('div', 'info legend'),
     //Magnitude Grades, stops at 5 magnitude
-    grades = [0, 1, 2, 3, 4, 5],
-    //Label?
-    labels = [];
+    grades = [0, 1, 2, 3, 4, 5];
+    
   //Legend Label Earthquake <break> Magnitude  
-  div.innerHTML+='Eathquake<br>Magnitude <br><hr>'
+  div.innerHTML+='Eathquake<br>Magnitude<br><hr>'
 
   // loop through our density intervals and generate a label with a colored square for each interval
   for (var i = 0; i < grades.length; i++) {

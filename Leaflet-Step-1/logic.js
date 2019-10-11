@@ -88,15 +88,15 @@ legend.onAdd = function (map) {
   //Dom Utility that puts legend into DIV & Info Legend
   var div = L.DomUtil.create('div', 'info legend'),
     //Magnitude Grades, stops at 5 magnitude
-    grades = [0, 1, 2, 3, 4, 5],
-    //Label?
-    labels = [];
+    grades = [0, 1, 2, 3, 4, 5];
+ 
   //Legend Label Earthquake <break> Magnitude  
-  div.innerHTML+='Eathquake<br>Magnitude <br><hr>'
+  div.innerHTML='Eathquake<br>Magnitude<br><hr>'
 
   // loop through our density intervals and generate a label with a colored square for each interval
   for (var i = 0; i < grades.length; i++) {
     div.innerHTML +=
+    //HTML code with nbs(non-breaking space) and ndash
       '<i style="background:' + getColor(grades[i] + 1) + '">&nbsp&nbsp&nbsp&nbsp</i> ' +
       grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
   }
