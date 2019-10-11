@@ -13,7 +13,7 @@ var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tile
 })
 
 //Satellite Layer
-var satmap = L.tileLayer("https://api.tiles.mapbox.com/v4/%7Bid%7D/%7Bz%7D/%7Bx%7D/%7By%7D.png?access_token={accessToken}", {
+var satmap = L.tileLayer("", {
   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.streets-satellite",
@@ -22,7 +22,7 @@ var satmap = L.tileLayer("https://api.tiles.mapbox.com/v4/%7Bid%7D/%7Bz%7D/%7Bx%
 
 
 //Outdoors Layers
-var street = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.outdoors",
@@ -41,9 +41,9 @@ graymap.addTo(myMap)
 
 
 var basemaps = {
-  "Gray Map": graymap, 
   "Satellite Map": satmap,
-  "Street Map": street,
+  "Gray Map": graymap, 
+  "Outdoors": outdoors,
 }
 
 L.control.layers(basemaps).addTo(myMap)
