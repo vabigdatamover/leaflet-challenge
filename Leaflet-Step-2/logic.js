@@ -1,8 +1,5 @@
-// // Creating map object
-// var myMap = L.map("map", {
-//   center: [38.89511, -77.03637],
-//   zoom: 6
-// });
+//Plate Data
+//var platesJSON = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_plates.json";
 
 //Gray Mapbox background, Base Gray Layer
 var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
@@ -13,7 +10,7 @@ var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tile
 })
 
 //Satellite Layer
-var satmap = L.tileLayer("", {
+var satmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.streets-satellite",
@@ -21,19 +18,32 @@ var satmap = L.tileLayer("", {
 })
 
 
-//Outdoors Layers
-var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
+//Outdoors Layers https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?
+var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.outdoors",
   accessToken: API_KEY
 })
 
+//  // Create overlay object to hold our overlay layer
+//   var overlayMaps = {
+//     Earthquakes: earthquakes,
+//     Plates: plates
+//   }; 
+
+var faults = L.tileLayer("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_plates.json", {
+  maxZoom: 18,
+})
+var geoData = L.tileLayer("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson",{
+  maxZoom: 18,
+})
+
 // Creating map object
 var myMap = L.map("map", {
   center: [38.89511, -77.03637],
   zoom: 6,
-  layers: [graymap, satmap, street]
+  layers: [graymap, satmap, outdoors, faults, geoData]
 
 });
 
@@ -44,6 +54,8 @@ var basemaps = {
   "Satellite Map": satmap,
   "Gray Map": graymap, 
   "Outdoors": outdoors,
+  "Earthquakes": geoData,
+  "Plates": faults
 }
 
 L.control.layers(basemaps).addTo(myMap)
@@ -51,12 +63,13 @@ L.control.layers(basemaps).addTo(myMap)
 // Load in geojson data
 var geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
-// var plateData = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json",
-
-// var geojson;
-
 //Grab data with d3
 d3.json(geoData, function (data) {
+
+  // Perform a GET request to the query URL
+  d3.json(faults, function(data2) {
+    //createFeatures(data.features, data2.features);
+    })
 
   // This function returns the style data for each of the earthquakes we plot on
   // the map. We pass the magnitude of the earthquake into two separate functions
